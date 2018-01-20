@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>image submit</title>
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+
+    <!-- endbuild -->
+    <link href='https://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister' rel='stylesheet'>
+    <style media="screen">
+      #loader{
+        position:absolute;
+        left:15%;
+        top:25%;
+        z-index:1;
+        width:150px;
+        height:150px;
+        margin:-75px 0 0 -75px;
+        border:16px solid #106c98;
+        border-radius:50px;
+        border-top:16px solid #28aae8;
+        width:120px;
+        height:120px;
+        -webkit-animatin:spin 2s linear infinite;
+        animation:spin 2s linear infinite;
+        display:none;
+      }
+      @-webkit-keyframes spin{
+        0%{-webkit-transform:rotate(0deg);}
+        100%{-webkit-transform:rotate(360deg);}
+      }
+      @keyframes spin{
+        0%{transform:rotate(0deg);}
+        100%{transform:rotate(360deg);}
+      }
+      .animate-bottom{
+        -webkit-animation-name:animatebottom:
+        -webkit-animation-duration:1.5s;
+        animation-name:animatebottom;
+        animation-duration:1.5s;
+      }
+      @-webkit-keyframes animatebottom{
+        from{bottom:-100px; opacity:0;}
+        to{bottom:0px; opacity:1;}
+      }
+      @keyframes animatebottom{
+        from{bottom:-100px; opacity:0;}
+        to{bottom:0px; opacity:1;}
+      }
+      #myDiv{
+        display:none;
+        text-align:center;
+        font-family:'love ya like a sister';
+        color:#28aae8;
+      }
+      body{
+        background-color:#106c98;
+      }
+      .container{
+        width:400px;
+        height:auto;
+      }
+      h1{
+        text-align:center;
+        font-family:'love ya like a sister';
+        color:#aca49c;
+      }
+      #fileButton{
+        margin-left:100px;
+        color:#aca49c;
+      }
+    </style>
+
+  </head>
+  <body>
+    <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="container">
+      <h1>Image Submit & Storage</h1>
+      <input type='file' id='fileButton'>
+      <div id='loader'></div>
+      <div id='myDiv' style='display:none' class='animate-bottom'>
+        <h2>Thank You!</h2>
+        <p>Your image will be posted shortly.</p>
+      </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/main.js -->
+
+    <!-- endbuild -->
+    <script src='https://www.gstatic.com/firebasejs/4.8.e/firebase.js'></script>
+    <script type="text/javascript">
+
+      firebase.initializeApp(config);
+    </script>
+    <script type="text/javascript">
+      var fileButton = document.getElementById('fileButton');
+      fileButton.addEventListener('change', function(e){
+        var myVar;
+        var file = e.target.files[0];
+        var storageRef = firebase.storage().ref(file.name);
+        var fileType = e.target.files[0].type;
+        if(fileType === 'image/png' || fileType === 'image/jpeg'){
+          document.getElementById('loader').style.display = 'block';
+          myVar = setTimeout(showPage, 3000);
+          document.getElementById('fileButton').style.display = 'none';
+          storageRef.put(file)
+        }else{
+          alert('Sorry that file type is not an image');
+        }
+        function steps(){
+          document.getElementById('loader').style.display = 'block';
+        }
+        function showPage(){
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('myDiv').style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>
